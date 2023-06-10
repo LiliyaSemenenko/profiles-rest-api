@@ -1,3 +1,5 @@
+# Note: permissions is configured in views.py
+
 from rest_framework import permissions
 
 # BasePermission: for making yur custom permission class 

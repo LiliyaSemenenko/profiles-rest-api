@@ -8,9 +8,18 @@ from rest_framework.response import Response
 from rest_framework import status # a list of HTTP status codes that are used to handle responses from api
 from django.db import models
 from django.db.models import CharField
-
 from profiles_api import serializers
 
+# TokenAuthentication: the type of authentication we use for users to authenticate themselves with our API it
+# works by generating a random token string when the user logs in and then
+# every request we make to their API that we need to authenticate we add this
+# token string to the request and that's effectively a password to check that
+# every request made is authenticated correctly
+from rest_framework.authentication import TokenAuthentication 
+from profiles_api import permissions
+
+
+##################################################################################################
 # Create your views here.
 
 # application logic for the endpoint assigned to this view 
@@ -167,7 +176,17 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     # the viewset that we will manage through this model viewset
     queryset = models.UserProfile.objects.all()
 
-
     # Explanation: the Django rest framework knows the standard functions you'd want to perform on a viewsset (list, create, list, destroy..)
     # and takes cares of all these functions to manage specific model objects in a dataset 
     # by assigning a serializer_class to a model serializer and the quesryset
+
+    # configure to use vorrect authentication and permissions classes
+    authentication_classes = (TokenAuthentication,) # this is a tuple, not a single item
+
+    # Control permissions
+    # UpdateOwnProfile: configures our user profile view set to use the token
+    # authentication and then add the permission UpdateOwnProfile. S
+    # So every request is passed through our permissions.py file
+    # and it checks this has object permissions function to see whether the
+    # user has permissions to perform the action they're trying to perform.
+    permission_classes = (permissions.UpdateOwnProfile,)
