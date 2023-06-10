@@ -18,6 +18,9 @@ from profiles_api import serializers
 from rest_framework.authentication import TokenAuthentication 
 from profiles_api import permissions
 
+### to add a serach profiles feature
+from rest_framework import filters
+from profiles_api.serializers import UserProfileSerializer
 
 ##################################################################################################
 # Create your views here.
@@ -189,4 +192,11 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     # So every request is passed through our permissions.py file
     # and it checks this has object permissions function to see whether the
     # user has permissions to perform the action they're trying to perform.
+    
     permission_classes = (permissions.UpdateOwnProfile,)
+
+
+    ### ADD SEARCH PROFILES FEATURE
+    filter_backends = [filters.SearchFilter]
+    # specify the search fields, where you can search by name and email
+    search_fields = ['name', 'email']
