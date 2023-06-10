@@ -22,6 +22,11 @@ from profiles_api import permissions
 from rest_framework import filters
 from profiles_api.serializers import UserProfileSerializer
 
+### a view that generates an auth token (random string) for login authentication
+from rest_framework.authtoken.views import ObtainAuthToken
+# 
+from rest_framework.settings import api_settings
+
 ##################################################################################################
 # Create your views here.
 
@@ -200,3 +205,17 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     # specify the search fields, where you can search by name and email
     search_fields = ['name', 'email']
+
+
+
+### CREATE A USER LOGIN FEATURE
+
+class UserLoginApiView(ObtainAuthToken):
+    """Handle creating user authentication tokens"""
+
+    # add the renderer classes to obtain auth tocken view,
+    # which will enable it in the Django admin the rest of the view sets 
+    # since Django admin doesn't have auth token by default
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+    

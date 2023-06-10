@@ -30,6 +30,9 @@ urlpatterns = [
     # as_view(): the standart func called to convert HelloApiView class to be rendered by our urls
     path('hello-view/', views.HelloApiView.as_view()),
 
+    # add login api path
+    path('login/', views.UserLoginApiView.as_view()),
+    
     # create a default router
     # url: /api/
     # generates a list of urls that are associated with the viewset
