@@ -1,3 +1,5 @@
+# API Root: http://127.0.0.1:8000/api
+
 from django.shortcuts import render
 
 ### new imports
@@ -77,35 +79,66 @@ class HelloApiView(APIView):
         return Response ({"method": 'DELETE'})
 
 
+### CREATING A VIEWSET: http://127.0.0.1:8000/api/hello-viewset/
+
+# "http_method": "GET": /api/hello-viewset/1/
 
 
+from rest_framework import viewsets
 
-    
+class HelloViewSet(viewsets.ViewSet):
+    """Test API ViewSet"""
 
+    serializer_class = serializers.HelloSerializer
 
+    def list(self, request):
+        """Return a hello message."""
 
+        a_viewset = [
+            'Uses actions (list, create, retrieve, update, partial_update)',
+            'Automatically maps to URLS using Routers',
+            'Provides more functionality with less code',
+        ]
 
+        return Response({'message': 'Hello!', 'a_viewset': a_viewset})
 
+    def create(self, request):
+        """Create a new hello message."""
 
+        # retrieve a serializer
+        serializer = self.serializer_class(data=request.data)
 
-# class HelloApiView(APIView):
-#     """Test API View"""
-#     serializer_class = serializers.HelloSerializer
+        if serializer.is_valid():
+            # retrieve the name field
+            name = serializer.validated_data.get('name')
+            # create a message
+            message = f'Hello {name}!'
 
-#     def get(self, request, format=None):
-#         """Returns a list of APIView features"""
-#         ...
+            return Response({'message': message})
+        
+        else: # if data is not valid
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-#     def post(self, request):
-#         """Create a hello message with our name"""
-#         serializer = self.serializer_class(data=request.data)
+    # for retrieving a specific object in our viewset
+    def retrieve(self, request, pk=None):
+        """Handle getting an object by its ID"""
 
-#         if serializer.is_valid():
-#             name = serializer.validated_data.get('name')
-#             message = f'Hello {name}!'
-#             return Response({'message': message})
-#         else:
-#             return Response(
-#                 serializer.errors,
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
+        return Response({'http_method': 'GET'})
+
+    def update(self, request, pk=None):
+        """Handle updating an object"""
+
+        return Response({'http_method': 'PUT'})
+
+    def partial_update(self, request, pk=None):
+        """Handle updating part of an object"""
+
+        return Response({'http_method': 'PATCH'})
+
+    def destroy(self, request, pk=None):
+        """Handle removing an object"""
+
+        return Response({'http_method': 'DELETE'})
