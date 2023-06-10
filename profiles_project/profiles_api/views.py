@@ -79,10 +79,11 @@ class HelloApiView(APIView):
         return Response ({"method": 'DELETE'})
 
 
+
+
 ### CREATING A VIEWSET: http://127.0.0.1:8000/api/hello-viewset/
 
 # "http_method": "GET": /api/hello-viewset/1/
-
 
 from rest_framework import viewsets
 
@@ -142,3 +143,31 @@ class HelloViewSet(viewsets.ViewSet):
         """Handle removing an object"""
 
         return Response({'http_method': 'DELETE'})
+
+
+
+
+### CREATE A VIEWSET TO ACCESS UserProfileViewSet SERIALIZER THROUGH AN ENDPOINT
+
+# User Profile List: GET /api/profile/
+# User Profile Instance: GET /api/profile/<user id>/
+
+from profiles_api import models
+
+# ModelViewSet: designed for managing models through our api
+# connect it to the serializer class and provide it 
+# a query set so it knows which object it will manage through this viewset.
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating and updating profiles"""
+
+    # assign a serializer class
+    serializer_class = serializers.UserProfileSerializer
+    
+    # the viewset that we will manage through this model viewset
+    queryset = models.UserProfile.objects.all()
+
+
+    # Explanation: the Django rest framework knows the standard functions you'd want to perform on a viewsset (list, create, list, destroy..)
+    # and takes cares of all these functions to manage specific model objects in a dataset 
+    # by assigning a serializer_class to a model serializer and the quesryset

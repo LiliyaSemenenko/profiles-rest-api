@@ -1,0 +1,100 @@
+# This will allow two different servers to run in separate containers, but also be able to communicate with one another. 
+# To run all the containers together: docker-comose up
+# To shut down all the containers together: docker-comose down
+
+version: '3'
+
+services: # ea service is it's own container that could be based of diff docker image
+    db: # database
+        image: postgres # postgras docker image to startup postgres container
+        ##################
+        environment:
+        - POSTGRES_PASSWORD=postgres
+        ##################
+    web: # webapp
+        build: . # Docker file from current dir
+        volumes:
+            - .:/usr/src/app # current dir should correspond to app dir
+        ports:
+            - "8000:8000" # port 8000 in my browser and port 8000 in container
+            # let's computer actually talk to a container so I can open up app in a webbrowser and see results
+##################
+        environment:
+        - POSTGRES_NAME=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+
+
+# This will allow two different servers to run in separate containers, but also be able to communicate with one another. 
+
+# version: '3'
+
+# services: # ea service is it's own container that could be based of diff docker image
+#     db: # database
+#         build: .
+#         container_name: db
+#         networks:
+#                 - djangonetwork
+#         image: postgres # postgras docker image to startup postgres container
+
+#     web: # webapp
+#         build: . # Docker file from current dir
+#         command: python manage.py runserver 0.0.0.0:8000
+#         volumes:
+#             - .:/usr/src/app # current dir should correspond to app dir
+#         depends_on:
+#              - db
+#         links:
+#              - db:db
+#         networks:
+#              - djangonetwork
+#         ports:
+#             - "8000:8000" # port 8000 in my browser and port 8000 in container
+#             # let's computer actually talk to a container so I can open up app in a webbrowser and see results
+#         environment:
+#             - POSTGRES_NAME=postgres
+#             - POSTGRES_USER=postgres
+# networks:
+#     djangonetwork:
+#         driver: bridge
+
+   
+# services:
+#   db:
+#     image: postgres
+#     volumes:
+#       - ./data/db:/var/lib/postgresql/data
+#     environment:
+#       - POSTGRES_PASSWORD=postgres
+#   web:
+#     build: .
+#     command: python manage.py runserver 0.0.0.0:8000
+#     volumes:
+#       - .:/code
+#     ports:
+#       - "8000:8000"
+#     environment:
+#       - POSTGRES_NAME=postgres
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#     depends_on:
+#       - db
+#########################################################
+#   services:
+#       db:
+#           build: .
+#           container_name: db
+#           networks:
+#               - djangonetwork
+#       web:
+#           build: .
+#           depends_on:
+#              - db
+#           links:
+#              - db:db
+#           networks:
+#              - djangonetwork
+
+#   networks:
+#       djangonetwork:
+#           driver: bridge
