@@ -104,6 +104,35 @@
             2. Add a static root (a location where Django will store all of the static files when we run our collect static command):
                 STATIC_ROOT = 'static/'
 
-    4. In git bash, type:
-         cdmod +x deploy/*.sh # this will set executable to any file that ends with .sh in our dir
-         
+    4. In "git bash", type:
+         chmod +x deploy/*.sh # this will set executable to any file that ends with .sh in our dir
+
+    5. Deploy to server
+        SHH to our server:
+            1. In AWS, got to EC2, got to Instances (one should be running),
+               belowsee "Details", look at Instance summary", where you can find "Public IPv4 DNS" and copy the public code (ex. ec2-35-174-170-142.compute-1.amazonaws.com)
+            2. In git bash, type this to connect to a server:
+                ssh ubuntu@<Public IPv4 DNS key>
+            3. Download and run the script that we created to setup our server:
+                a) After you're connected to a server, go to GitHub,
+                    find "deploy" folder that was pushed to the project, 
+                    inside "deploy" folder click on "setup.sh" and click on a "raw" button, 
+                    copy a url of that raw file scipt.
+                b) In git bash, type:
+                    curl -sL <raw setup.sh file url from GH> | sudo bash -
+                    curl -sL https://raw.githubusercontent.com/LiliyaSemenenko/profiles-rest-api/master/deploy/setup.sh | sudo bash -
+
+                    What it does: runs the curl command to download the file and then it passes it into sudo bash 
+                    
+                    Command description:
+
+                        curl: retrieves contents from a URL so it's basically a HTTP client in Linux
+                        -s: is for running in silent mode which means it won't update us with all of the steps when it's downloading the file
+                        L: is for following redirects so if there's any redirects of this URL then it will automatically follow them to the final destination and download the contents
+                        | (aka the pipe): is used to pipe the output of one command into another command so we're going to take the output of this curl command and we're going to pass it into sudo bash 
+                        sudo: is used to run commands as administrator on Linux  
+                        bash: is what we're going to use to run our script
+                        hyphen: is used to signal the end of the options provided for bash so that it knows anything we pass in is to be ran on bash and not an option to configure bash
+
+
+
