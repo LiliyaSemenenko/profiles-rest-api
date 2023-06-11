@@ -57,3 +57,53 @@
             - GET (get the feed item)
             - PUT / PATCH (update feed item)
             - DELETE (delete feed item)
+
+• Deploying API to a server to AWS:
+
+    1. Add key pair to AWS:
+        a) Get SSH key pair from terminal:
+            cat ~/.ssh/id_rsa.pub
+
+            copy "ssh-rsa AAA....lilinikcopy@gmail.com"
+
+        b) Log into AWS, go to services, search for "EC2" and go to its dashboard.
+           (Note: EC2 server instance is a virtual machine that you can spin up and connect to to deploy our application.)
+
+            Scroll down to "Key pairs", click on that.
+            On the right top side, click on "Actions", then on "Import Key Pair".
+
+            Create a name like "liliya-deskop" and paste SSH key. 
+            Then, click on "Import Key Pair".
+
+    2. Create EC2 server instance
+        a) Go to "Services", search for "EC2" Dashboard and 
+           click on "Launch Instance" to create a new instance.
+
+        b) Inside a Launch Instance:
+            1. Choose your Amazon Machine Image (AMI)
+            2. Under Security Group, add a new group and choose HTTP as type and 0.0.0/0 as Source
+            3.  Choose the SSH key, which we already created in step #1.
+            4. Click "Launch Instance" to create it.
+
+    3. Add deployment script and configs to our project.
+        a) Download "deploy.zip" (https://drive.google.com/file/d/1zBs-ZWFwp8De8YRrhIuxTEBK_sT5hbfk/view) and add it to the project directory. 
+
+        b) In setup.sh, add the github link to you project as HTTP to 
+            PROJECT_GIT_URL=''
+
+        c) No action needed:
+           Once the setup.sh is done, update.sh will be used to update the code on the server when we make changes.
+        
+        d) In setting.py in project dir:
+        
+            1. change DEBUG = True to bool(int(os.environ.get('DEBUG',1))) 
+            
+                Bcs we're running server publicly to avoid error messages visible to users.
+                Note: it's pulling the value DEBUG=0, which will be converted to False, from supervisor_profiles_api.conf.
+
+            2. Add a static root (a location where Django will store all of the static files when we run our collect static command):
+                STATIC_ROOT = 'static/'
+
+    4. In git bash, type:
+         cdmod +x deploy/*.sh # this will set executable to any file that ends with .sh in our dir
+         
