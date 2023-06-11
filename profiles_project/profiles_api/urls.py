@@ -13,7 +13,7 @@ router = DefaultRouter()
 router.register('hello-viewset', views.HelloViewSet, basename='hello-viewset')
 
 
-### register a UserProfileViewSet as 'profile'
+### register a UserProfileViewSet as 'profile' url
 
 # Note: no need to specify "basename=" bcs we have a queryset object
 # so Django REST framework can get a name out of the model that's assigned to it.
@@ -22,6 +22,8 @@ router.register('hello-viewset', views.HelloViewSet, basename='hello-viewset')
 
 router.register('profile', views.UserProfileViewSet)
 
+### register a UserProfileFeed as 'feed' url
+router.register('feed', views.UserProfileFeedViewSet)
 
 urlpatterns = [
 

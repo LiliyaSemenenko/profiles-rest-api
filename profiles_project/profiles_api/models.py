@@ -4,6 +4,10 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 
+# use to retrieve settings from settings.py file in project folder
+# in particular, we'' retrieve AUTH_USER_MODEL
+from django.conf import settings
+
 # Create your models here.
 
 class UserProfileManager(BaseUserManager):
@@ -75,4 +79,38 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         return self.email
     
 
+### CREATE PROFILE FEED API ###
 
+# Model that allows users to store status updates in the system 
+# so every time they create a new update it's going to create 
+# a new profile feed item object and associate that object with
+# the user that created it.
+class ProfileFeedItem(models.Model):
+    """Profile status update"""
+
+    # Use a foreign key field it sets up a foreign key relationship 
+    # in the database to a remote model.
+    # The benefit is that it allows you to ensure that the integrity
+    # of the database is maintained so you can never create a 
+    # profile feed item for a user profile that doesn't exist.
+    user_profile = models.ForeignKey(
+        # name of the remote model of this foreign key
+        # retrieve it from AUTH_USER_MODEL in setting.py
+        settings.AUTH_USER_MODEL,
+        
+        # if the remote field (user profile) is deleted, 
+        # cascade the changes down through all the deleted feed
+        # so remove all the feed items associated with the user profile
+        # Note: on_delete = models.setnull will not delete the feed items, just the profile
+        on_delete = models.CASCADE
+    )
+    # containes text of the field update
+    status_text = models.CharField(max_length=225)
+
+    # once we create a new feed item automatically add the date time stamp that the item was created
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    # string represenattion of our model (converting model instance to a string)
+    def __str__(self):
+        """Return the model as a string"""
+        return self.status_text

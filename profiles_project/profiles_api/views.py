@@ -24,8 +24,12 @@ from profiles_api.serializers import UserProfileSerializer
 
 ### a view that generates an auth token (random string) for login authentication
 from rest_framework.authtoken.views import ObtainAuthToken
-# 
 from rest_framework.settings import api_settings
+
+### ensures that the viewsiet is only visible to an authenticated user
+from rest_framework.permissions import IsAuthenticated
+
+
 
 ##################################################################################################
 # Create your views here.
@@ -208,7 +212,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
 
 
-### CREATE A USER LOGIN FEATURE
+### CREATE A USER LOGIN FEATURE ###
 
 class UserLoginApiView(ObtainAuthToken):
     """Handle creating user authentication tokens"""
@@ -219,3 +223,44 @@ class UserLoginApiView(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
     
+### CREATE A USER PROFILE FEED API basic model viewset ###
+
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """Handles creating, reading and updating profile feed items"""
+   
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ProfileFeedItemSerializer
+    # query set that will be managed through our viewset
+    queryset = models.ProfileFeedItem.objects.all()
+
+
+    ## permission class for profile user feed
+    permission_classes = (
+        permissions.UpdateOwnStatus, # from permissions.py
+        IsAuthenticated # authenticated user
+    )
+
+
+    # to set user_profile READ ONLY
+    # perform_create(): allows to override or customize the behavior 
+    # for creating objects through a Model View set
+
+    # so when a request gets made to our view set it gets passed into
+    # our serializer class and validated and then the serializer.save() is
+    # called by default if we need to customize the logic for creating an
+    # object. We can do this using the perform_create(), which
+    # gets called every time you do an HTTP POST to our view set.
+        
+
+    def perform_create(self, serializer):
+        """Sets the user profile to the logged in user"""
+        serializer.save(user_profile=self.request.user)
+
+        # request: object that gets passed into all view sets every time a request 
+        # is made and contains all of the details about the request being made to the view set.
+        
+        # Because we've added the token authentication to our view set, if the
+        # user has authenticated, then the request will have a user associated to the
+        # authenticated user. So this user field gets added whenever the user
+        # is authenticated if they're not authenticated then it's just set to an
+        # anonymous user account.

@@ -19,7 +19,7 @@ class HelloSerializer(serializers.Serializer): # Serializer is a classname. Than
 
 
 
-### CREATING PROFILES API
+### CREATING PROFILES API ###
 
 from profiles_api import models
 
@@ -82,11 +82,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
 
 
+### CREATING PROFILE FEED API ###
 
-# class ProfileFeedItemSerializer(serializers.ModelSerializer):
-#     """Serializes profile feed items"""
+class ProfileFeedItemSerializer(serializers.ModelSerializer):
+    """Serializes profile feed items"""
 
-#     class Meta:
-#         model = models.ProfileFeedItem
-#         fields = ('id', 'user_profile', 'status_text', 'created_on')
-#         extra_kwargs = {'user_profile': {'read_only': True}}
+    class Meta:
+        model = models.ProfileFeedItem
+        
+        # id and created_on is set up by default and is set to READ ONLY
+        fields = ('id', 'user_profile', 'status_text', 'created_on')
+        
+        # user_profile has to be set when the user is authentificated
+        # therefore, user_profile has to be made READ ONLY as well
+        extra_kwargs = {'user_profile': {'read_only': True}}
