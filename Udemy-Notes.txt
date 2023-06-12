@@ -105,14 +105,17 @@
                 STATIC_ROOT = 'static/'
 
     4. In "git bash", type:
-         chmod +x deploy/*.sh # this will set executable to any file that ends with .sh in our dir
+          # this will set executable to any file that ends with .sh in our dir
 
     5. Deploy to server
         SHH to our server:
             1. In AWS, got to EC2, got to Instances (one should be running),
                belowsee "Details", look at Instance summary", where you can find "Public IPv4 DNS" and copy the public code (ex. ec2-35-174-170-142.compute-1.amazonaws.com)
             2. In git bash, type this to connect to a server:
+                
                 ssh ubuntu@<Public IPv4 DNS key>
+                ssh ubuntu@ec2-34-201-40-189.compute-1.amazonaws.com
+
             3. Download and run the script that we created to setup our server:
                 a) After you're connected to a server, go to GitHub,
                     find "deploy" folder that was pushed to the project, 
@@ -135,4 +138,5 @@
                         hyphen: is used to signal the end of the options provided for bash so that it knows anything we pass in is to be ran on bash and not an option to configure bash
 
 
+sudo rm -rf /usr/local/apps/profiles-rest-api
 
