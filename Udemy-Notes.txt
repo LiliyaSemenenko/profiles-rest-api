@@ -82,7 +82,7 @@
         b) Inside a Launch Instance:
             1. Choose your Amazon Machine Image (AMI)
             2. Under Security Group, add a new group and choose HTTP as type and 0.0.0/0 as Source
-            3.  Choose the SSH key, which we already created in step #1.
+            3. Choose the SSH key, which we already created in step #1.
             4. Click "Launch Instance" to create it.
 
     3. Add deployment script and configs to our project.
@@ -130,7 +130,7 @@
 
                 c) In git bash, type:
                     curl -sL <raw setup.sh file url from GH> | sudo bash -
-                    curl -sL https://raw.githubusercontent.com/LiliyaSemenenko/profiles-rest-api/master/deploy/setup.sh | sudo bash -
+                    curl -sL https://raw.githubusercontent.com/LiliyaSemenenko/profiles-rest-api/deployment/deploy/setup.sh | sudo bash -
 
                     What it does: runs the curl command to download the file and then it passes it into sudo bash 
                     
