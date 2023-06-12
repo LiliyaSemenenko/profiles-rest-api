@@ -140,9 +140,17 @@
 sudo rm -rf /usr/local/apps/profiles-rest-api
                     
 
-            4. Go to settings.py and paste your server's Public IPv4 DNS key:
+            4. Update allowed hosts and deploy changes:
+                a) Go to settings.py and paste your server's Public IPv4 DNS key:
 
                     ALLOWED_HOSTS = ['Public IPv4 DNS key',
                     '127.0.0.1' # local server
                     ]
+                b) push all the files to github
+                c) run our update script on the server to pull the latest changes:
+
+                    1. In git bash, navigate to dir 
+                        cd /usr/local/apps/profiles-rest-api/
+                    2. Run the update script to update the app based on the latest GH changes:
+                        sudo sh ./deploy/update.sh
 
