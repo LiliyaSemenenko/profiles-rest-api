@@ -149,7 +149,7 @@
                     ALLOWED_HOSTS = ['Public IPv4 DNS key',
                     '127.0.0.1' # local server
                     ]
-                    
+
                 b) push all the files to github
                 c) run our update script on the server to pull the latest changes:
 
@@ -158,3 +158,4 @@
                     2. Run the update script to update the app based on the latest GH changes:
                         sudo sh ./deploy/update.sh
 
+cd /usr/local/apps/profiles-rest-api/src/
