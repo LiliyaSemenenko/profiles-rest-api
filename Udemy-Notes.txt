@@ -158,6 +158,15 @@
                     2. Run the update script to update the app based on the latest GH changes:
                         sudo sh ./deploy/update.sh
 
+            5. Add a Superuser to log into admin
+
+                a) In Git Bash, type:
+
+                    sudo env/bin/python manage.py createsuperuser
+
+
+
 cd /usr/local/apps/profiles-rest-api/src/
 
 #deployment
+
