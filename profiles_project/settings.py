@@ -30,7 +30,7 @@ DEBUG = bool(int(os.environ.get('DEBUG',1))) # for public server
 # VALLOWED_HOSTS: allows to enable access via specific domain names.
 # It's a security feature to make sure that if somebody just finds a random IP address
 # for our server they can't access the application unless they use a valid host name
-ALLOWED_HOSTS = ['ec2-35-174-174-11.compute-1.amazonaws.com',
+ALLOWED_HOSTS = ['ec2-44-212-37-114.compute-1.amazonaws.com',
                  '127.0.0.1'
                  ]
 
