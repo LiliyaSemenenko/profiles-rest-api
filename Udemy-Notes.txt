@@ -137,6 +137,12 @@
                         bash: is what we're going to use to run our script
                         hyphen: is used to signal the end of the options provided for bash so that it knows anything we pass in is to be ran on bash and not an option to configure bash
 
-
 sudo rm -rf /usr/local/apps/profiles-rest-api
+                    
+
+            4. Go to settings.py and paste your server's Public IPv4 DNS key:
+
+                    ALLOWED_HOSTS = ['Public IPv4 DNS key',
+                    '127.0.0.1' # local server
+                    ]
 

@@ -27,7 +27,12 @@ SECRET_KEY = "django-insecure-82aetm4q^d8fgsqki^-xalqm_anr4xp2ws)31bbstu3u&j0cb+
 import os
 DEBUG = bool(int(os.environ.get('DEBUG',1))) # for public server
 
-ALLOWED_HOSTS = []
+# VALLOWED_HOSTS: allows to enable access via specific domain names.
+# It's a security feature to make sure that if somebody just finds a random IP address
+# for our server they can't access the application unless they use a valid host name
+ALLOWED_HOSTS = ['ec2-34-201-40-189.compute-1.amazonaws.com',
+                 '127.0.0.1'
+                 ]
 
 
 # Application definition
