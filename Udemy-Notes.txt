@@ -135,7 +135,6 @@
                     What it does: runs the curl command to download the file and then it passes it into sudo bash 
                     
                     Command description:
-
                         curl: retrieves contents from a URL so it's basically a HTTP client in Linux
                         -s: is for running in silent mode which means it won't update us with all of the steps when it's downloading the file
                         L: is for following redirects so if there's any redirects of this URL then it will automatically follow them to the final destination and download the contents
@@ -143,8 +142,6 @@
                         sudo: is used to run commands as administrator on Linux  
                         bash: is what we're going to use to run our script
                         hyphen: is used to signal the end of the options provided for bash so that it knows anything we pass in is to be ran on bash and not an option to configure bash
-
-                    
 
             4. Update allowed hosts and deploy changes:
                 a) Go to settings.py and paste your server's Public IPv4 DNS key:
