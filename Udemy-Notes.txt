@@ -96,16 +96,19 @@
         
         d) In setting.py in project dir:
         
-            1. change DEBUG = True to bool(int(os.environ.get('DEBUG',1))) 
+            1. Change 
+            
+                DEBUG = True to bool(int(os.environ.get('DEBUG',1))) 
             
                 Bcs we're running server publicly to avoid error messages visible to users.
                 Note: it's pulling the value DEBUG=0, which will be converted to False, from supervisor_profiles_api.conf.
 
             2. Add a static root (a location where Django will store all of the static files when we run our collect static command):
+                
                 STATIC_ROOT = 'static/'
 
     4. In "git bash", type:
-          # this will set executable to any file that ends with .sh in our dir
+        chmod +x deploy/*.sh  # this will set executable to any file that ends with .sh in our dir
 
     5. Deploy to server
         SHH to our server:
