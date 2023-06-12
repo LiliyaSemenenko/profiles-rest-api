@@ -1,0 +1,163 @@
+🐘 🦧 🦘 🐁 🦄  🐓 🐎
+
+
+• Profilers API Plan: 
+
+    Basic Feature Requirments:
+        1. Create new profile 
+            - Handle registration of new users
+            - Validate profile data
+
+        2. Listing existing profiles
+            - Search for profiles
+            - Email and name
+
+        3. View secific profiles
+            - Profile ID
+
+        4. Update profile of logged in user
+            - Change name, email, and password
+
+        5. Delete profile
+
+
+    API URLs:
+
+        /api/profile/
+            When HTTP ___ method is called:
+                - GET: list all profiles
+                - POST: create new profile
+
+        /api/profile/<profile_id>
+            When HTTP ___ method is called:
+                - GET: view specific profile details
+                - PUT/PATCH: update object
+                - DELETE: remove object completely
+
+
+
+• Create Profile Feed API
+
+    Basic Feature Requirments:
+        1. Creating new feed items for authenticated users 
+        2. Updating an existing feed item in case the user makes a typo 
+           or wants to change the content of a feed item they've already posted 
+        3. Deleting an item
+        4. Viewing other users feed items 
+        
+        
+    API URLs:
+        /api/feed/
+            - list all feed items
+            - GET (list feed items)
+            - POST (create feed item for logged in user)
+
+        /api/feed/<feed_item_id>/
+            - manage specific feed items
+            - GET (get the feed item)
+            - PUT / PATCH (update feed item)
+            - DELETE (delete feed item)
+
+• Deploying API to a server to AWS:
+
+    1. Add key pair to AWS:
+        a) Get SSH key pair from the terminal:
+            cat ~/.ssh/id_rsa.pub
+
+            copy "ssh-rsa AAA....lilinikcopy@gmail.com"
+
+        b) Log into AWS, go to services, search for "EC2" and go to its dashboard.
+           (Note: EC2 server instance is a virtual machine that you can spin up and connect to to deploy our application.)
+
+            Scroll down to "Key pairs", click on that.
+            On the right top side, click on "Actions", then on "Import Key Pair".
+
+            Create a name like "liliya-deskop" and paste SSH key. 
+            Then, click on "Import Key Pair".
+
+    2. Create EC2 server instance
+        a) Go to "Services", search for "EC2" Dashboard and 
+           click on "Launch Instance" to create a new instance.
+
+        b) Inside a Launch Instance:
+            1. Choose your Amazon Machine Image (AMI)
+            2. Under Security Group, add a new group and choose HTTP as type and 0.0.0/0 as Source
+            3.  Choose the SSH key, which we already created in step #1.
+            4. Click "Launch Instance" to create it.
+
+    3. Add deployment script and configs to our project.
+        a) Download "deploy.zip" (https://drive.google.com/file/d/1zBs-ZWFwp8De8YRrhIuxTEBK_sT5hbfk/view) and add it to the project directory. 
+
+        b) In setup.sh, add the github link to you project as HTTP to 
+            PROJECT_GIT_URL=''
+
+        c) No action needed:
+           Once the setup.sh is done, update.sh will be used to update the code on the server when we make changes.
+        
+        d) In setting.py in project dir:
+        
+            1. Change 
+            
+                DEBUG = True to bool(int(os.environ.get('DEBUG',1))) 
+            
+                Bcs we're running server publicly to avoid error messages visible to users.
+                Note: it's pulling the value DEBUG=0, which will be converted to False, from supervisor_profiles_api.conf.
+
+            2. Add a static root (a location where Django will store all of the static files when we run our collect static command):
+                
+                STATIC_ROOT = 'static/'
+
+    4. In "git bash", type:
+        chmod +x deploy/*.sh  # this will set executable to any file that ends with .sh in our dir
+
+    5. Deploy to server
+        SHH to our server:
+            1. In AWS, got to EC2, got to Instances (one should be running),
+               belowsee "Details", look at Instance summary", where you can find "Public IPv4 DNS" and copy the public code (ex. ec2-35-174-170-142.compute-1.amazonaws.com)
+            2. In git bash, type this to connect to a server:
+                
+                ssh ubuntu@<Public IPv4 DNS key>
+                ssh ubuntu@ec2-35-174-174-11.compute-1.amazonaws.com
+
+            3. Download and run the script that we created to setup our server:
+                a) After you're connected to a server, go to GitHub,
+                    find "deploy" folder that was pushed to the project, 
+                    inside "deploy" folder click on "setup.sh" and click on a "raw" button, 
+                    copy a url of that raw file scipt.
+
+                b) Delete server dir if created already:
+                    sudo rm -rf /usr/local/apps/profiles-rest-api
+
+                c) In git bash, type:
+                    curl -sL <raw setup.sh file url from GH> | sudo bash -
+                    curl -sL https://raw.githubusercontent.com/LiliyaSemenenko/profiles-rest-api/master/deploy/setup.sh | sudo bash -
+
+                    What it does: runs the curl command to download the file and then it passes it into sudo bash 
+                    
+                    Command description:
+                        curl: retrieves contents from a URL so it's basically a HTTP client in Linux
+                        -s: is for running in silent mode which means it won't update us with all of the steps when it's downloading the file
+                        L: is for following redirects so if there's any redirects of this URL then it will automatically follow them to the final destination and download the contents
+                        | (aka the pipe): is used to pipe the output of one command into another command so we're going to take the output of this curl command and we're going to pass it into sudo bash 
+                        sudo: is used to run commands as administrator on Linux  
+                        bash: is what we're going to use to run our script
+                        hyphen: is used to signal the end of the options provided for bash so that it knows anything we pass in is to be ran on bash and not an option to configure bash
+
+            4. Update allowed hosts and deploy changes:
+                a) Go to settings.py and paste your server's Public IPv4 DNS key:
+
+                    ALLOWED_HOSTS = ['Public IPv4 DNS key',
+                    '127.0.0.1' # local server
+                    ]
+
+                b) push all the files to github
+                c) run our update script on the server to pull the latest changes:
+
+                    1. In git bash, navigate to dir 
+                        cd /usr/local/apps/profiles-rest-api/
+                    2. Run the update script to update the app based on the latest GH changes:
+                        sudo sh ./deploy/update.sh
+
+cd /usr/local/apps/profiles-rest-api/src/
+
+#deployment
