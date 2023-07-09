@@ -1,19 +1,11 @@
-from django.contrib import messages
-
-
-#######################################################################################################
-
-
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 # Additional imports we'll need:
-from django.contrib.auth import authenticate, login, logout
-# "authenticate" checks if username and password are correct
+from django.contrib.auth import authenticate, login, logout     # "authenticate" checks if username and password are correct
 
-from django.contrib.auth.models import User
-
+from .forms import SignUpForm
 
 
 # displays info about currently signed in users (if they successfully log in)
@@ -51,42 +43,22 @@ def logout_view(request):
                 "message": "Logged Out"  # diaplay this statement
             })
 
-
-# from django.contrib.auth.models import User
-# from django.contrib import messages
-# from django.db import IntegrityError 
-
-# def signup_view(request):
-#     if request.method == 'POST':
-#         username = request.POST.get('username')
-#         email = request.POST.get("email")
-#         password = request.POST.get('password')
-        
-#         try:
-#             user = authenticate(request, username=username, email=email, password=password)
-#             messages.success(request, 'User registered successfully. You can now log in.')
-#             # login(request, user)
-#             return render(request, "users/profile.html") # render this template
-        
-#         except IntegrityError: # occurs if you attempt to create a user with a username that already exists in the database
-#             messages.error(request, 'Username is already taken. Please choose a different one.')
-
-#     return render(request, 'users/signup.html')
-
-
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import SignupForm
-
+ 
 def signup_view(request):
     if request.method == 'POST':
-        form = SignupForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Signup successful! You can now login.')
-            return redirect('login')  # Replace 'login' with the URL name of your login page
-    else:
-        form = SignupForm()
-    
-    return render(request, 'users/signup.html', {'form': form})
+            user = form.save()
+            user.refresh_from_db()  
+            # load the profile instance created by the signal
+            user.save()
 
+            # After successful registration
+            message = "Registration was completed successfully. Please log in."
+
+            # redirect user to login page with a message
+            return render(request, 'users/login.html', {'message': message})
+
+    else:
+        form = SignUpForm()
+    return render(request, 'users/signup.html', {'form': form})
