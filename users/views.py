@@ -1,3 +1,11 @@
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+
+#######################################################################################################
+
+
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -6,7 +14,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 # "authenticate" checks if username and password are correct
 
-# Create your views here.
+
 
 # displays info about currently signed in users (if they successfully log in)
 def index(request):
