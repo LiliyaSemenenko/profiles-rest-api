@@ -2,6 +2,13 @@
 # allows to covert data inputs into Python objects and vice versa.
 # similar to Django forms
 
+# In Django, a serializer is a component that converts complex data types, such as Django models, 
+# into a format that can be easily rendered into various output formats, such as JSON, XML, or HTML.
+
+# In summary, serializers.Serializer is a flexible and customizable base class for defining serializers, 
+# while serializers.ModelSerializer provides higher-level abstraction and automates much of the serialization/deserialization process 
+# by leveraging the model's fields and relationships.
+
 # Note: Django REST Framework (DRF)
 
 from django.db import models
@@ -16,7 +23,6 @@ class HelloSerializer(serializers.Serializer): # Serializer is a classname. Than
     # serializer is going to validate your input by rules
 
     name = serializers.CharField(max_length=10)
-
 
 
 ### CREATING PROFILES API ###
