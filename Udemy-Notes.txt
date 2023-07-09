@@ -131,7 +131,7 @@
 
                 c) In git bash, type:
                     curl -sL <raw setup.sh file url from GH> | sudo bash -
-                    curl -sL https://raw.githubusercontent.com/LiliyaSemenenko/profiles-rest-api/deployment/deploy/setup.sh | sudo bash -
+                    curl -sL https://raw.githubusercontent.com/LiliyaSemenenko/profiles-rest-api/master/deploy/setup.sh | sudo bash -
 
                     What it does: runs the curl command to download the file and then it passes it into sudo bash 
                     
@@ -165,6 +165,13 @@
 
                     sudo env/bin/python manage.py createsuperuser
 
+                b) To open admin webpage, type this in a browser:
+
+                    http://ec2-44-202-69-2.compute-1.amazonaws.com/admin
+
+            6. Open a link in your browser:
+
+                http://ec2-44-202-69-2.compute-1.amazonaws.com/api
 
 
 cd /usr/local/apps/profiles-rest-api/src/
