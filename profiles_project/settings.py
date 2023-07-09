@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "profiles_api",
     "rest_framework", # app that was installed via prompt
     "rest_framework.authtoken",
+    "users",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

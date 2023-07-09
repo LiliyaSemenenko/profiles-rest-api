@@ -25,4 +25,6 @@ urlpatterns = [
 
     # add /api prefix to the url
     path("api/", include('profiles_api.urls')),
+
+    path("users/", include("users.urls")), # the app for signup, login, logout, profile view
 ]
