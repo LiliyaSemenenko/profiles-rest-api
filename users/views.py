@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout     # "authenticate" checks if username and password are correct
 
 from .forms import SignUpForm
+from django.contrib import messages
 
 
 # displays info about currently signed in users (if they successfully log in)
@@ -33,8 +34,14 @@ def login_view(request):
             return render(request, "users/login.html", { # render user login page again
                 "message": "Invalid Credentials" # diaplay this statement
             }) 
-
+        
+    if request.GET.get('message'):
+        # Get the message from the query parameters
+        message = request.GET.get('message')
+        return render(request, 'users/login.html', {'message': message})
+    
     return render(request, "users/login.html")
+  
 
 
 def logout_view(request):
@@ -56,8 +63,20 @@ def signup_view(request):
             # After successful registration
             message = "Registration was completed successfully. Please log in."
 
+
+
+            # Redirect to the login URL with the message as a query parameter
+            return redirect(f'login/?message={message}')
+        
+            # return render(request, 'users/login.html', {'message': message}) # FOR EX RN
+
+            # return redirect('login')  # Redirect to the 'login' URL name or path
+            ### 2nd option
+            # return HttpResponseRedirect(reverse("login"))  # user is redirected back to login page
+
             # redirect user to login page with a message
-            return render(request, 'users/login.html', {'message': message})
+            # return render(request, 'users/login.html', {'message': message})
+            
 
     else:
         form = SignUpForm()
